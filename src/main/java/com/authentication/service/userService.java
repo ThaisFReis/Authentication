@@ -3,12 +3,15 @@ package com.authentication.service;
 import com.authentication.repository.userRepository;
 import com.authentication.model.userModel;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class userService {
     public static void createUser(String email, String name, String password) throws Exception {
         userModel user = new userModel();
         user.setEmail(email);
         user.setName(name);
-        user.setPassword(password);
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        user.setPassword(hashedPassword);
         userRepository.createUser(user);
     }
 

@@ -2,6 +2,8 @@ package com.authentication.controller;
 
 import com.authentication.model.userModel;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class userController {
 
     public static void createUser(String email, String name, String password) throws Exception {
@@ -29,9 +31,11 @@ public class userController {
         if (user == null) {
             throw new Exception("User not found");
         }
-        if (!user.getPassword().equals(password)) {
-            throw new Exception("Password is incorrect");
+
+        if (BCrypt.checkpw(password, user.getPassword())) {
+            return user;
+        } else {
+            throw new Exception("Incorrect password");
         }
-        return user;
     }
 }
